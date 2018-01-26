@@ -1,69 +1,14 @@
-# Clean Galileo capitation list
-
-#' Title
+#' Galileo Function: clean Galileo capitation list
 #'
-#' @return
+#' @return Tibble
 #' @export
 #'
 #' @examples
-# Need to read in the 'Capitation List' report in Galileo
-
-    # Column names to convert the Galileo capitation list to:
-    # BUS_PHONE_NUMBER = col_character(),
-    # CURR_PCP_ADDRESS_LINE_1 = col_character(),
-    # CURR_PCP_ADDRESS_LINE_2 = col_character(),
-    # CURR_PCP_CITY = col_character(),
-    # CURR_PCP_FULL_NAME = col_character(),
-    # CURR_PCP_ID = col_double(),
-    # CURR_PCP_STATE = col_character(),
-    # CURR_PCP_ZIP = col_integer(),
-    # DOB = col_character(),
-    # GENDER = col_character(),
-    # HIEID = col_character(),
-    # HOME_PHONE_NUMBER = col_double(),
-    # IRS_TAX_ID = col_integer(),
-    # LastCapitationDate = col_character(),
-    # MEDICAID_NO = col_double(),
-    # MEDICARE_NO = col_double(),
-    # MEMB_ADDRESS_LINE_1 = col_character(),
-    # MEMB_ADDRESS_LINE_2 = col_character(),
-    # MEMB_CITY = col_character(),
-    # MEMB_FIRST_NAME = col_character(),
-    # MEMB_LAST_NAME = col_character(),
-    # MEMB_STATE = col_character(),
-    # MEMB_ZIP = col_integer(),
-    # PAYER = col_character(),
-    # PHONE_NUMBER = col_double(),
-    # PRACTICE = col_character(),
-    # SOCIAL_SEC_NO = col_character(),
-    # Source = col_character(),
-    # SUBSCRIBER_ID = col_character(),
-    # VEND_FULL_NAME = col_character(),
-    # VENDOR_ID = col_character(),
-    # MonthlyBulkImport = col_character()
-
-    # Column names in Galileo capitation list table
-    # `Camden ID` = col_character(),
-    # MedicaidID = col_character(),
-    # `Pt Name` = col_character(),
-    # `Home Address` = col_character(),
-    # `Zip Code` = col_character(),
-    # Gender = col_character(),
-    # `Date of Birth` = col_character(),
-    # `Attribution Begin Date` = col_character(),
-    # `Attribution End Date` = col_character(),
-    # `Provider Name` = col_character(),
-    # `Selected Office Name` = col_character(),
-    # `Health Plan` = col_character(),
-    # Payer = col_character(),
-    # `Subscriber ID` = col_character(),
-    # `Phone Number` = col_character()
+#' galileo(x)
+#' y <- galileo(x) %>% write_csv(y, "y.csv", na = "")
 
 galileo <-
   function(x) {
-    # Clean Galileo capitation list
-
-
     # Changes to individual fields
     # `Pt Name` needs to be split into MEMB_FIRST_NAME and MEMB_LAST_NAME
     x <-  x %>%
@@ -132,12 +77,16 @@ galileo <-
         str_detect(x$`Selected Office Name`, "virtua") == TRUE ~ "Virtua"
       ))
 
-    # Source column: Source of the data
+    # Source column: Source of the patient list for each patient
     # If PAYER is equal to "None", then the Source of Data should be "Medicaid"
-    # Need this column to be available in Galileo first
-    # ifelse(x$Payer == 'None', x$Source == "Medicaid",
-    #        )
-
+    x$Source <- x %>% mutate(
+      Source = case_when(
+        str_detect(x$Source, "United") == TRUE ~ "United",
+        str_detect(x$Source, "None") == TRUE ~ "Medicaid",
+        str_detect(x$Source, "NGII") == TRUE ~ "NGII",
+        str_detect(x$Source, "CooperUHI") == TRUE ~ "CoopherUHI"
+      )
+    )
 
     # If PAYER is equal to "None" (that is, a patient is not on MCO capitation list)
     # the value of PAYER should be replaced with the value of gal_health_plan
@@ -155,12 +104,10 @@ galileo <-
     # Add columns until they're added into Galileo file
     x$SOCIAL_SEC_NO <- ""
     x$MEDICARE_NO <- ""
-    x$Source <- ""
-
 
     # Select Galileo columns, and rename when necessary, to match TrackVia Import file
     # Dplyr: new_col = existing_col
-    x_export <- select(x,
+    x <- select(x,
                          CURR_PCP_FULL_NAME,
                          DOB = `Date of Birth`,
                          `Galileo Attributed Practice`,
@@ -185,5 +132,5 @@ galileo <-
                          #  = `Attribution Begin Date`,
                          #  = `Attribution End Date`,
                       )
-    print(x_export)
+    print(x)
   }
