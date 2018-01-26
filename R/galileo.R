@@ -29,11 +29,10 @@ galileo <-
 
     # `Phone Number`: Remove hyphens, parentheses, and 'None' for HOME_PHONE_NUMBER
     x <- x %>%
-      mutate(HOME_PHONE_NUMBER = str_replace_all(`Phone Number`, "-|\\(|\\)|None| ", "") )
+      mutate(HOME_PHONE_NUMBER = str_replace_all(`Phone Number`, "-|\\(|\\)|None| ", ""))
     x$HOME_PHONE_NUMBER <- substring(x$HOME_PHONE_NUMBER, 1, 10)
 
     # `Health Plan`: Clean and merge with Payer, with existing Payer values getting preference
-
     x <- x %>% mutate(
       gal_health_plan = case_when(
         `Health Plan` == "D-SNP: HORIZON MEDICARE BLUE TOTALCARE" ~ "HORIZON DUAL",
@@ -47,12 +46,11 @@ galileo <-
         `Health Plan` == "PACE: LIFE AT LOURDES" ~ "PACE LIFE AT LOURDES"
       ))
 
-
     # `Selected Office Name`: Rename `Galileo Attributed Practice``
-    # First, make `Selected Office Name` lower case
+    ## First, make `Selected Office Name` lower case
     x$`Selected Office Name` <- tolower(x$`Selected Office Name`)
 
-    # Galileo:
+    ## Second, standardize practice names
     x <- x %>% mutate(
       `Galileo Attributed Practice` = case_when(
         str_detect(x$`Selected Office Name`, "acosta") == TRUE ~ "Acosta",
@@ -79,18 +77,22 @@ galileo <-
 
     # Source column: Source of the patient list for each patient
     # If PAYER is equal to "None", then the Source of Data should be "Medicaid"
-    x$Source <- x %>% mutate(
+    x <- x %>% mutate(
       Source = case_when(
         str_detect(x$Source, "United") == TRUE ~ "United",
         str_detect(x$Source, "None") == TRUE ~ "Medicaid",
         str_detect(x$Source, "NGII") == TRUE ~ "NGII",
-        str_detect(x$Source, "CooperUHI") == TRUE ~ "CoopherUHI"
+        str_detect(x$Source, "CooperUHI") == TRUE ~ "UHI_Nic"
       )
     )
 
     # If PAYER is equal to "None" (that is, a patient is not on MCO capitation list)
     # the value of PAYER should be replaced with the value of gal_health_plan
-    x$payer_test <- ifelse(x$Payer == 'None', x$gal_health_plan, x$Payer)
+    x$payer_clean <- ifelse(x$Payer == 'None', x$gal_health_plan, x$Payer)
+
+    # SSN: Rename to SOCIAL_SEC_NO
+    # Remove dashes, spaces
+    x <- x %>% mutate(SOCIAL_SEC_NO = str_replace_all(SSN, "-|\\(|\\)|None| ", ""))
 
     # MonthlyBulkImport
     x$MonthlyBulkImport <- "Monthly Import"
@@ -101,36 +103,33 @@ galileo <-
     x$`Attribution Begin Date` <- x$`Attribution Begin Date` %>% str_replace_all(" 12:00:00 AM", "")
     x$`Attribution End Date` <- x$`Attribution End Date` %>% str_replace_all(" 12:00:00 AM", "")
 
-    # Add columns until they're added into Galileo file
-    x$SOCIAL_SEC_NO <- ""
+    # Add columns until they're added into Galileo report
     x$MEDICARE_NO <- ""
 
     # Select Galileo columns, and rename when necessary, to match TrackVia Import file
     # Dplyr: new_col = existing_col
     x <- select(x,
-                         CURR_PCP_FULL_NAME,
-                         DOB = `Date of Birth`,
-                         `Galileo Attributed Practice`,
-                         Gender,
-                         HOME_PHONE_NUMBER,
-                         LastCapitationDate,
-                         MCO_Subscriber_ID = `Subscriber ID`,
-                         MEDICAID_NO = MedicaidID,
-                         MEDICARE_NO,
-                         MEMB_ADDRESS_LINE_1,
-                         MEMB_CITY,
-                         MEMB_FIRST_NAME,
-                         MEMB_LAST_NAME,
-                         MEMB_STATE,
-                         MEMB_ZIP = `Zip Code`,
-                         MonthlyBulkImport,
-                         `Patient ID HIE` = `Camden ID`,
-                         Payer = payer_test,
-                         SOCIAL_SEC_NO,
-                         Source
-                         #  = `Health Plan`,
-                         #  = `Attribution Begin Date`,
-                         #  = `Attribution End Date`,
-                      )
+                 CURR_PCP_FULL_NAME,
+                 DOB = `Date of Birth`,
+                 `Galileo Attributed Practice`,
+                 Gender,
+                 HOME_PHONE_NUMBER,
+                 LastCapitationDate,
+                 MCO_Subscriber_ID = `Subscriber ID`,
+                 MEDICAID_NO = MedicaidID,
+                 MEDICARE_NO,
+                 MEMB_ADDRESS_LINE_1,
+                 MEMB_CITY,
+                 MEMB_FIRST_NAME,
+                 MEMB_LAST_NAME,
+                 MEMB_STATE,
+                 MEMB_ZIP = `Zip Code`,
+                 MonthlyBulkImport,
+                 `Patient ID HIE` = `Camden ID`,
+                 Payer = payer_clean,
+                 SOCIAL_SEC_NO,
+                 Source
+                )
+
     print(x)
   }
