@@ -143,6 +143,7 @@ united <- function(x) {
   AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "VIRTUA MEDICAL GROUP"] <- "Virtua"
   AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "VIRTUA MEDICAL GROUP PA"] <- "Virtua"
   AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "NELSON HOMER L"] <- "Broadway Community"
+  AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "NELSON, HOMER"] <- "Broadway Community"
   AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "ERVILUS PATRICK"] <- "Broadway Community"
 
   # Sets as dataframe

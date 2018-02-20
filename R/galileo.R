@@ -92,7 +92,8 @@ galileo <-
 
     # SSN: Rename to SOCIAL_SEC_NO
     # Remove dashes, spaces
-    x <- x %>% mutate(SOCIAL_SEC_NO = str_replace_all(SSN, "-|\\(|\\)|None| ", ""))
+    # x <- x %>% mutate(SOCIAL_SEC_NO = str_replace_all(SSN, "-|\\(|\\)|None| ", ""))
+    x <- x %>% mutate(SOCIAL_SEC_NO = "")
 
     # MonthlyBulkImport
     x$MonthlyBulkImport <- "Monthly Import"
@@ -106,6 +107,11 @@ galileo <-
     # Add columns until they're added into Galileo report
     x$MEDICARE_NO <- ""
 
+    # Make Camden ID lower case
+    x$`Patient ID HIE` <- tolower(x$`Camden ID`)
+
+    x$MCO_Subscriber_ID <- ifelse(x$`Subscriber ID` == 'None', "", x$`Subscriber ID`)
+
     # Select Galileo columns, and rename when necessary, to match TrackVia Import file
     # Dplyr: new_col = existing_col
     x <- select(x,
@@ -115,8 +121,8 @@ galileo <-
                  Gender,
                  HOME_PHONE_NUMBER,
                  LastCapitationDate,
-                 MCO_Subscriber_ID = `Subscriber ID`,
-                 MEDICAID_NO = MedicaidID,
+                 MCO_Subscriber_ID,
+                 Medicaid_Claims_ID = MedicaidID,
                  MEDICARE_NO,
                  MEMB_ADDRESS_LINE_1,
                  MEMB_CITY,
@@ -125,7 +131,8 @@ galileo <-
                  MEMB_STATE,
                  MEMB_ZIP = `Zip Code`,
                  MonthlyBulkImport,
-                 `Patient ID HIE` = `Camden ID`,
+                 `Patient ID HIE`,
+                 EMPI = `Person ID`,
                  Payer = payer_clean,
                  SOCIAL_SEC_NO,
                  Source
