@@ -30,16 +30,16 @@ united <- function(x) {
   x$COSMOS_CUST_SEG_DESC <- NULL
 
   # Renames fields in the United cap list
-  x <- rename(x, DOB = DATE_OF_BIRTH)
-  x <- rename(x, GENDER = MEMB_GENDER)
-  x <- rename(x, CURR_PCP_ID = PROVIDER_ID)
-  x <- rename(x, PHONE_NUMBER = PROV_PHONE)
-  x <- rename(x, CURR_PCP_ADDRESS_LINE_1 = PROV_ADDRESS_LINE_1)
-  x <- rename(x, CURR_PCP_ADDRESS_LINE_2 = PROV_ADDRESS_LINE_2)
-  x <- rename(x, CURR_PCP_CITY = PROV_CITY)
-  x <- rename(x, CURR_PCP_STATE = PROV_STATE)
-  x <- rename(x, CURR_PCP_ZIP = PROV_ZIP)
-  x <- rename(x, VEND_FULL_NAME = PAYEE_NAME)
+  x <- rename(x, c(DATE_OF_BIRTH = "DOB"))
+  x <- rename(x, c(MEMB_GENDER = "GENDER"))
+  x <- rename(x, c(PROVIDER_ID = "CURR_PCP_ID"))
+  x <- rename(x, c(PROV_PHONE = "PHONE_NUMBER"))
+  x <- rename(x, c(PROV_ADDRESS_LINE_1 = "CURR_PCP_ADDRESS_LINE_1"))
+  x <- rename(x, c(PROV_ADDRESS_LINE_2 = "CURR_PCP_ADDRESS_LINE_2"))
+  x <- rename(x, c(PROV_CITY = "CURR_PCP_CITY"))
+  x <- rename(x, c(PROV_STATE = "CURR_PCP_STATE"))
+  x <- rename(x, c(PROV_ZIP = "CURR_PCP_ZIP"))
+  x <- rename(x, c(PAYEE_NAME = "VEND_FULL_NAME"))
 
   # Maps languages in the united file to the full name of the language
   x$MEMB_LANGUAGE <- as.character(x$MEMB_LANGUAGE)
@@ -144,7 +144,9 @@ united <- function(x) {
   AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "VIRTUA MEDICAL GROUP PA"] <- "Virtua"
   AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "NELSON HOMER L"] <- "Broadway Community"
   AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "NELSON, HOMER"] <- "Broadway Community"
-  AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "ERVILUS PATRICK"] <- "Broadway Community"
+  AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "EAST CAMDEN MEDICAL PRACTICE"] <- "East Camden"
+  AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "NGUYEN BAO D"] <- "Bao Nguyen"
+  AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "BROADWAY COMM HLTH CARE"] <- "Broadway Community"
 
   # Sets as dataframe
   AllPayers <- as.data.frame(AllPayers)
