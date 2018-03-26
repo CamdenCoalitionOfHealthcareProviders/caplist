@@ -62,15 +62,17 @@ galileo <-
         str_detect(x$`Selected Office Name`, "cooper phys") == TRUE ~ "Cooper IM",
         str_detect(x$`Selected Office Name`, "cooper ped") == TRUE ~ "Cooper Pediatrics",
         str_detect(x$`Selected Office Name`, "cooper woodly") == TRUE ~ "Cooper Woodlyne",
+        str_detect(x$`Selected Office Name`, "east camden") == TRUE ~ "East Camden",
         str_detect(x$`Selected Office Name`, "fairview") == TRUE ~ "Fairview",
         str_detect(x$`Selected Office Name`, "kleeman") == TRUE ~ "Fairview",
         str_detect(x$`Selected Office Name`, "franklin") == TRUE ~ "Franklin Scarlett",
         str_detect(x$`Selected Office Name`, "lourdes ped") == TRUE ~ "Lourdes Pediatrics",
         str_detect(x$`Selected Office Name`, "lourdes med") == TRUE ~ "Osborn",
+        str_detect(x$`Selected Office Name`, "nguyen") == TRUE ~ "Bao Nguyen",
         str_detect(x$`Selected Office Name`, "osborn") == TRUE ~ "Osborn",
         str_detect(x$`Selected Office Name`, "project") == TRUE ~ "Project Hope",
         str_detect(x$`Selected Office Name`, "reliance") == TRUE ~ "Reliance Broadway",
-        str_detect(x$`Selected Office Name`, "uhi") == TRUE ~ "Cooper UHI",
+        str_detect(x$`Selected Office Name`, "uhi") == TRUE ~ "Cooper IM",
         str_detect(x$`Selected Office Name`, "unassigned") == TRUE ~ "Unassigned",
         str_detect(x$`Selected Office Name`, "virtua") == TRUE ~ "Virtua"
       ))
