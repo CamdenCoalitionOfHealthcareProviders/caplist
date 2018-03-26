@@ -107,6 +107,7 @@ united <- function(x) {
   AllPayers$VEND_FULL_NAME[AllPayers$VEND_FULL_NAME == "THE OSBORN FAMILY HEALTH CENTER INC" & AllPayers$CURR_PCP_CITY == "CAMDEN"] <- "OSBORN FAMILY PRACTICE_CAMDEN"
   AllPayers$VEND_FULL_NAME[AllPayers$VEND_FULL_NAME == "BROADWAY FAMILY PRACTICE" & AllPayers$CURR_PCP_CITY == "CAMDEN"] <- "RELIANCE BROADWAY_CAMDEN"
   AllPayers$VEND_FULL_NAME[AllPayers$VEND_FULL_NAME == "BROADWAY FAMILY PRACTICE" & AllPayers$CURR_PCP_CITY == "PENNSAUKEN"] <- "RELIANCE BROADWAY_PENNSAUKEN"
+  AllPayers$VEND_FULL_NAME[AllPayers$VEND_FULL_NAME == "COOPER PHYSICIANS OFFICES" & AllPayers$CURR_PCP_CITY == "OAKLYN"] <- "COOPER WOODLYNNE"
 
   # Maps to practices
   AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "ACOSTA RAMON"] <- "Acosta"
@@ -147,6 +148,7 @@ united <- function(x) {
   AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "EAST CAMDEN MEDICAL PRACTICE"] <- "East Camden"
   AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "NGUYEN BAO D"] <- "Bao Nguyen"
   AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "BROADWAY COMM HLTH CARE"] <- "Broadway Community"
+  AllPayers$PRACTICE[AllPayers$VEND_FULL_NAME == "COOPER WOODLYNNE"] <- "Cooper Woodlynne"
 
   # Sets as dataframe
   AllPayers <- as.data.frame(AllPayers)
