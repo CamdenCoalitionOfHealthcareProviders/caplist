@@ -78,10 +78,10 @@ united <- function(x) {
   # Deletes entries with the wrong vendor names
   x <- subset(x, !(VEND_FULL_NAME=="CHILD REGIONAL/CAMDEN"))
 
-  # Keeps only where PCP City is Camden or Pennsauken, and keeps all of CamCare
-  x <- subset(x, CURR_PCP_CITY=="CAMDEN" | CURR_PCP_CITY=="CADMEN" |CURR_PCP_CITY=="CANDEM" |CURR_PCP_CITY=="PENNSAUKEN" | VEND_FULL_NAME=="CAMCARE HEALTH CORPORATION")
+  # Keeps only where PCP City is Camden, Pennsauken, or Oaklyn, and keeps all of CamCare
+  x <- subset(x, CURR_PCP_CITY=="CAMDEN" | CURR_PCP_CITY=="CADMEN" |CURR_PCP_CITY=="CANDEM" | CURR_PCP_CITY=="PENNSAUKEN"| CURR_PCP_CITY=="OAKLYN" | VEND_FULL_NAME=="CAMCARE HEALTH CORPORATION")
 
-  # If the code to rename vendors gives you trouble, modify the below code to fix the errors#
+  # If the code to rename vendors gives you trouble, modify the below code to fix the errors
   x <- data.frame(lapply(x, as.character), stringsAsFactors=FALSE)
 
   # Adds Identification fields
