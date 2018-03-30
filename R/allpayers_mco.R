@@ -2,8 +2,8 @@
 #'
 #' @return Tibble
 #'
-#' a = AllPayersHIEID file
-#' c = CurrentHIEIDs file
+#' a = AllPayersHIEID file from CareEvolution
+#' c = CurrentHIEIDs file from CareEvolution on the FTP
 #' @examples
 #' allpayers_mco(a, c)
 #'

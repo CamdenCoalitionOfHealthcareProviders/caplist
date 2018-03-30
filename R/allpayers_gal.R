@@ -10,7 +10,7 @@
 #'
 
 allpayers_gal <- function(g, c) {
-    # g_clean <- galileo(g)
+    g_clean <- galileo(g)
 
     # Convert Date columns from character to date: DOB and LastCapitationDate
     g$DOB <- as.Date(g$DOB, "%m/%d/%Y")

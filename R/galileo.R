@@ -92,11 +92,6 @@ galileo <-
     # the value of PAYER should be replaced with the value of gal_health_plan
     x$payer_clean <- ifelse(x$Payer == 'None', x$gal_health_plan, x$Payer)
 
-    # SSN: Rename to SOCIAL_SEC_NO
-    # Remove dashes, spaces
-    # x <- x %>% mutate(SOCIAL_SEC_NO = str_replace_all(SSN, "-|\\(|\\)|None| ", ""))
-    x <- x %>% mutate(SOCIAL_SEC_NO = "")
-
     # MonthlyBulkImport
     x$MonthlyBulkImport <- "Monthly Import"
     x$LastCapitationDate <- format(Sys.time(), "%m/01/%Y")
@@ -108,6 +103,7 @@ galileo <-
 
     # Add columns until they're added into Galileo report
     x$MEDICARE_NO <- ""
+    x$SOCIAL_SEC_NO <- ""
 
     # Make Camden ID lower case
     x$`Patient ID HIE` <- tolower(x$`Camden ID`)

@@ -9,7 +9,7 @@
 #'
 
 # deduplicate:
-# Combines results of mco_allpayers and galileo_allpayers
+# Combines results of allpayers_mco and allpayers_gal
 # Keeps ACO records where HIE ID is NOT in AllPayers (MCO) data frame
 deduplicate <-
   function(m, g) {
@@ -17,7 +17,8 @@ deduplicate <-
     g_clean_no_mco
   }
 
-# Combine mco_allpayers and results of deduplicate
+# Combine allpayers_mco and results of deduplicate
+# Binds together MCO-only patient list and ACO patient list without MCO patients
 combine <-
   function(a, d) {
     combine <- rbind(a, d)
