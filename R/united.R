@@ -154,6 +154,9 @@ united <- function(x) {
   x$PRACTICE[x$VEND_FULL_NAME == "BROADWAY COMM HLTH CARE"] <- "Broadway Community"
   x$PRACTICE[x$VEND_FULL_NAME == "COOPER WOODLYNNE"] <- "Cooper Woodlynne"
 
+  # Date of birth cleaning before merging with Cherry Hill patients
+  x$DOB <- as.Date(x$DOB)
+
   # Merges x data
   AllPayers <- rbind(x, y3)
 
