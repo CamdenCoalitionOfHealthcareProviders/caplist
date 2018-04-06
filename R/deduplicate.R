@@ -18,7 +18,7 @@ deduplicate <-
   }
 
 # Combine allpayers_mco and results of deduplicate
-# Binds together MCO-only patient list and ACO patient list without MCO patients
+# Binds together MCO-only patient list (AllPayersHIEID file) and ACO patient list without MCO patients
 combine <-
   function(a, d) {
     combine <- rbind(a, d)

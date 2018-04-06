@@ -13,11 +13,11 @@ allpayers_gal <- function(g, c) {
     g_clean <- galileo(g)
 
     # Convert Date columns from character to date: DOB and LastCapitationDate
-    g$DOB <- as.Date(g$DOB, "%m/%d/%Y")
-    g$LastCapitationDate <- as.Date(g$LastCapitationDate, "%m/%d/%Y")
+    g_clean$DOB <- as.Date(g_clean$DOB, "%m/%d/%Y")
+    g_clean$LastCapitationDate <- as.Date(g_clean$LastCapitationDate, "%m/%d/%Y")
 
     # Galileo: Find HIE IDs where "Patient ID HIE" is "none"
-    g_clean_hie_join <- g %>% left_join(c, by = c("EMPI" = "Person ID"))
+    g_clean_hie_join <- g_clean %>% left_join(c, by = c("EMPI" = "Person ID"))
 
     # Remove United MCO patients from Galileo list
     # United MCO patients will be bound to Galileo list later
