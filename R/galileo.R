@@ -61,7 +61,7 @@ galileo <-
         str_detect(x$`Selected Office Name`, "cooper im") == TRUE ~ "Cooper IM",
         str_detect(x$`Selected Office Name`, "cooper phys") == TRUE ~ "Cooper IM",
         str_detect(x$`Selected Office Name`, "cooper ped") == TRUE ~ "Cooper Pediatrics",
-        str_detect(x$`Selected Office Name`, "cooper woodly") == TRUE ~ "Cooper Woodlyne",
+        str_detect(x$`Selected Office Name`, "cooper woodly") == TRUE ~ "Cooper Woodlynne",
         str_detect(x$`Selected Office Name`, "east camden") == TRUE ~ "East Camden",
         str_detect(x$`Selected Office Name`, "fairview") == TRUE ~ "Fairview",
         str_detect(x$`Selected Office Name`, "kleeman") == TRUE ~ "Fairview",
