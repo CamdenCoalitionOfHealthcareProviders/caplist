@@ -47,6 +47,7 @@ allpayers_gal <- function(g, c) {
       `CURR_PCP_ID` = "",
       `CURR_PCP_STATE` = "",
       `CURR_PCP_ZIP` = "",
+      `Galileo Attributed Practice` = `Galileo Attributed Practice.x`,
       GENDER = Gender,
       `IRS_TAX_ID` = "",
       MEMB_ADDRESS_LINE_2 = "",

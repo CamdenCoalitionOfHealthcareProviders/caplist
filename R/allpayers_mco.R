@@ -41,11 +41,11 @@ allpayers_mco <- function(a, c) {
         `Cap List Payer` = PAYER,
         Medicaid_Claims_ID = `Medicaid Claims ID`,
         SOCIAL_SEC_NO = SSN_clean,
+        `Galileo Attributed Practice`,
         -SOCIAL_SEC_NO,
         -`Cap List Payer`,
         -HIEID,
         -`Cap List Subscriber ID`,
-        -`Galileo Attributed Practice`,
         - MEDICAID_NO
       )
 
