@@ -81,10 +81,15 @@ galileo <-
     # If PAYER is equal to "None", then the Source of Data should be "Medicaid"
     x <- x %>% mutate(
       Source = case_when(
-        str_detect(x$Source, "United") == TRUE ~ "United",
-        str_detect(x$Source, "None") == TRUE ~ "Medicaid",
-        str_detect(x$Source, "NGII") == TRUE ~ "NGII",
-        str_detect(x$Source, "CooperUHI") == TRUE ~ "UHI_Nic"
+        `Health Plan` == "D-SNP: HORIZON MEDICARE BLUE TOTALCARE" ~ "Medicaid Horizon Dual",
+        `Health Plan` == "D-SNP: UNITEDHEALTHCARE DUAL COMPLETE" ~ "Medicaid United Dual",
+        `Health Plan` == "HMO: AETNA" ~ "Medicaid AETNA",
+        `Health Plan` == "HMO: AMERIGROUP NEW JERSEY, INC." ~ "Medicaid Amerigroup",
+        `Health Plan` == "HMO: HORIZON NJ HEALTH" ~ "Medicaid Horizon",
+        `Health Plan` == "HMO: UNITEDHEALTHCARE" ~ "Medicaid United",
+        `Health Plan` == "HMO: WELLCARE NJ" ~ "Medicaid Wellcare",
+        `Health Plan` == "Not Assigned" ~ "Medicaid Not Assigned",
+        `Health Plan` == "PACE: LIFE AT LOURDES" ~ "Medicaid PACE"
       )
     )
 
