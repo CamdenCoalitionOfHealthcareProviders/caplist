@@ -29,7 +29,7 @@ galileo <-
 
     # `Phone Number`: Remove hyphens, parentheses, and 'None' for HOME_PHONE_NUMBER
     x <- x %>%
-      mutate(HOME_PHONE_NUMBER = str_replace_all(`Phone Number`, "-|\\(|\\)|None| ", ""))
+      mutate(HOME_PHONE_NUMBER = str_replace_all(`Phone Number`, "-|\\(|\\)|None| |[:alpha:]", ""))
     x$HOME_PHONE_NUMBER <- substring(x$HOME_PHONE_NUMBER, 1, 10)
 
     # `Health Plan`: Clean and merge with Payer, with existing Payer values getting preference
