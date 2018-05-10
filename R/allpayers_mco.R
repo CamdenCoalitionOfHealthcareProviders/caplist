@@ -23,7 +23,7 @@ allpayers_mco <- function(a, c) {
     a3 <- a2 %>% anti_join(twins, by = "Patient ID HIE")
 
     # Add EMPI to AllPayers and remove NIC patients from AllPayers
-    c_match <- c %>% filter(`Cap List Payer` != 'CooperUHI')
+    c_match <- c %>% filter(is.na(c$`Cap List Payer`) == T | `Cap List Payer` != 'CooperUHI')
     a_hie_join <- a3 %>% left_join(c_match, by = c("Patient ID HIE" = "Patient ID"))
 
     # Rename AllPayers Columns (Dplyr: new_col = existing_col)
