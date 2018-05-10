@@ -102,7 +102,7 @@ galileo <-
     x$LastCapitationDate <- format(Sys.time(), "%m/01/%Y")
 
     # `Date of Birth`: remove ' 12:00:00 AM' from field
-    x$`Date of Birth` <- x$`Date of Birth` %>% str_replace_all(" 12:00:00 AM", "")
+    x$DOB <- x$DOB %>% str_replace_all(" 12:00:00 AM", "")
     x$`Attribution Begin Date` <- x$`Attribution Begin Date` %>% str_replace_all(" 12:00:00 AM", "")
     x$`Attribution End Date` <- x$`Attribution End Date` %>% str_replace_all(" 12:00:00 AM", "")
 
@@ -119,7 +119,7 @@ galileo <-
     # Dplyr: new_col = existing_col
     x <- select(x,
                  CURR_PCP_FULL_NAME,
-                 DOB = `Date of Birth`,
+                 DOB,
                  `Galileo Attributed Practice`,
                  Gender,
                  HOME_PHONE_NUMBER,
