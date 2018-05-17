@@ -10,7 +10,9 @@
 
 allpayers_mco <- function(a, c) {
     # Rename and Lower AllPayers "HIEID" column
-    a2 <- a %>% mutate(`Patient ID HIE`= tolower(a$HIEID))
+    a2 <- a %>%
+      mutate(`Patient ID HIE` = tolower(a$HIEID)) %>%
+      filter(PAYER == 'UNITED')
 
     # Change c$`Cap List Subscriber ID` column to integer
     c$`Cap List Subscriber ID` <- as.integer(c$`Cap List Subscriber ID`)
