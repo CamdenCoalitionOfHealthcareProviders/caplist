@@ -21,7 +21,7 @@ allpayers_gal <- function(g, c) {
 
     # Remove United MCO patients from Galileo list
     # United MCO patients will be bound to Galileo list later
-    g_clean_hie_join <- g_clean_hie_join %>% filter(is.na(`Cap List Payer`))
+    g_clean_hie_join <- g_clean_hie_join %>% filter(is.na(`Cap List Payer`) == T|`Cap List Payer` != 'United')
 
 
     # Update  for non-MCO patients (Source == "Medicaid") to "1/1/2018"

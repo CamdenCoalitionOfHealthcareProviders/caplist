@@ -13,7 +13,7 @@ galileo <-
     # `Pt Name` needs to be split into MEMB_FIRST_NAME and MEMB_LAST_NAME
     x <-  x %>%
       mutate(MEMB_LAST_NAME = str_split(`Pt Name`, ", ") %>% sapply("[", 1),
-             MEMB_FIRST_NAME = str_split(x$`Pt Name`, ", ") %>% sapply("[", 2))
+             MEMB_FIRST_NAME = str_split(`Pt Name`, ", ") %>% sapply("[", 2))
 
     # `Home Address` needs to be split into MEMB_ADDRESS_LINE_1, MEMB_CITY, MEMB_STATE
     x <- x %>%
