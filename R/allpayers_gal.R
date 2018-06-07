@@ -10,6 +10,21 @@
 #'
 
 allpayers_gal <- function(g, c) {
+    # Deduplicate the CurrentHIEIDs file
+    c_unique <- c %>% group_by(`Patient ID`) %>% add_tally() %>% filter(n == 1) # No dupes
+    c_dupe <- c %>% group_by(`Patient ID`) %>% add_tally() %>% filter(n > 1) # dupes
+
+    c_dupe_no_uhi <- c_dupe %>% filter(`Cap List Payer` != 'CooperUHI' | is.na(`Cap List Payer`) == T) %>% select(-n)
+    c_dupe_no_uhi_unique <- c_dupe_no_uhi %>% group_by(`Patient ID`) %>% add_tally() %>% filter(n == 1)
+
+    c_dupe_no_uhi_dupe <- c_dupe_no_uhi %>% group_by(`Patient ID`) %>% add_tally() %>% filter(n > 1) %>% select(-n)
+    c_dupe_no_uhi_dupe_unique <- c_dupe_no_uhi_dupe %>% filter(is.na(`Cap List Payer`) == F) %>% group_by(`Patient ID`) %>% add_tally() %>% filter(n == 1)
+
+    c_dupe_no_uhi_dupe_dupetobind <- c_dupe_no_uhi_dupe %>% filter(is.na(`Cap List Payer`) == F) %>% group_by(`Patient ID`) %>% add_tally() %>% filter(n > 1)
+
+    currenthieid_clean <- rbind(c_unique, c_dupe_no_uhi_unique, c_dupe_no_uhi_dupe_unique, c_dupe_no_uhi_dupe_dupetobind) %>% select(-n)
+
+    # Clean ACO list
     g_clean <- galileo(g)
 
     # Convert Date columns from character to date: DOB and LastCapitationDate
@@ -17,7 +32,7 @@ allpayers_gal <- function(g, c) {
     g_clean$LastCapitationDate <- as.Date(g_clean$LastCapitationDate, "%m/%d/%Y")
 
     # Galileo: Find HIE IDs where "Patient ID HIE" is "none"
-    g_clean_hie_join <- g_clean %>% left_join(c, by = c("EMPI" = "Person ID"))
+    g_clean_hie_join <- g_clean %>% left_join(currenthieid_clean, by = c("EMPI" = "Person ID"))
 
     # Remove United MCO patients from Galileo list
     # United MCO patients will be bound to Galileo list later

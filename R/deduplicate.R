@@ -22,7 +22,9 @@ deduplicate <-
 combine_mco_aco <-
   function(a, d) {
     bind <- rbind(a, d)
-    bind
+    bind_hieid_dupe <- bind %>% mutate(hie_dupe = duplicated(co$`Patient ID HIE`))
+    bind_hieid_dupe_clean <- bind_hieid_dupe %>% filter(hie_dupe == FALSE) %>% select(-hie_dupe)
+    bind_hieid_dupe_clean
   }
 
 # Twins
