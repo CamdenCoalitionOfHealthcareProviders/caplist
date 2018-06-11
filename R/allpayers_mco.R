@@ -51,8 +51,9 @@ allpayers_mco <- function(a, c) {
         - MEDICAID_NO
       )
 
-    # Convert column from character to date: LastCapitationDate
+    # Convert column from character to date: LastCapitationDate, DOB
     a_hie_join_update$LastCapitationDate <- as.Date(a_hie_join_update$LastCapitationDate, "%m/%d/%Y")
+    a_hie_join_update$DOB <- as.Date(a_hie_join_update$DOB, "%m/%d/%Y")
 
     # Order the columns for binding with Galileo data frame
     a_hie_join_bind <- a_hie_join_update[order(colnames(a_hie_join_update))]
