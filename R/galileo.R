@@ -84,6 +84,7 @@ galileo <-
         str_detect(x$`Selected Office Name`, "reliance") == TRUE ~ "Reliance Broadway",
         str_detect(x$`Selected Office Name`, "unassigned") == TRUE ~ "Unassigned",
         str_detect(x$`Selected Office Name`, "virtua camden") == TRUE ~ "Virtua Camden",
+        str_detect(x$`Selected Office Name`, "virtua medical group") == TRUE ~ "Virtua Camden",
         str_detect(x$`Selected Office Name`, "virtua cherry hill") == TRUE ~ "Virtua Cherry Hill",
         str_detect(x$`Selected Office Name`, "virtua cooper river") == TRUE ~ "Virtua Cooper River"
       ))
