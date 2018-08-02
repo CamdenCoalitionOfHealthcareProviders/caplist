@@ -31,19 +31,16 @@ united <- function(x) {
   x$COSMOS_CUST_SEG_DESC <- NULL
 
   # Renames fields in the United cap list
-  x <- rename(x, c(DATE_OF_BIRTH = "DOB"))
-  x <- rename(x, c(MEMB_GENDER = "GENDER"))
-  x <- rename(x, c(PROVIDER_ID = "CURR_PCP_ID"))
-  x <- rename(x, c(PROV_PHONE = "PHONE_NUMBER"))
-  x <- rename(x, c(PROV_ADDRESS_LINE_1 = "CURR_PCP_ADDRESS_LINE_1"))
-  x <- rename(x, c(PROV_ADDRESS_LINE_2 = "CURR_PCP_ADDRESS_LINE_2"))
-  x <- rename(x, c(PROV_CITY = "CURR_PCP_CITY"))
-  x <- rename(x, c(PROV_STATE = "CURR_PCP_STATE"))
-  x <- rename(x, c(PROV_ZIP = "CURR_PCP_ZIP"))
-  x <- rename(x, c(PAYEE_NAME = "VEND_FULL_NAME"))
-
-  # Adds text identifiers to Subscriber IDs
-  x$SUBSCRIBER_ID <- paste("U", x$SUBSCRIBER_ID, sep="")
+  x <- x %>% rename(DOB = DATE_OF_BIRTH,
+                    GENDER = MEMB_GENDER,
+                    CURR_PCP_ID = PROVIDER_ID,
+                    PHONE_NUMBER = PROV_PHONE,
+                    CURR_PCP_ADDRESS_LINE_1 = PROV_ADDRESS_LINE_1,
+                    CURR_PCP_ADDRESS_LINE_2 = PROV_ADDRESS_LINE_2,
+                    CURR_PCP_CITY = PROV_CITY,
+                    CURR_PCP_STATE = PROV_STATE,
+                    CURR_PCP_ZIP = PROV_ZIP,
+                    VEND_FULL_NAME = PAYEE_NAME)
 
   # Sets the MEDICAID_NO field as numeric to get rid of scientific notation
   options(scipen=999)
@@ -62,30 +59,6 @@ united <- function(x) {
   # Deletes entries with the wrong vendor names
   x <- subset(x, !(VEND_FULL_NAME=="CHILD REGIONAL/CAMDEN"))
 
-  # Subset Cooper Cherry Hill practices
-  pattern_1050 <- c('1050', 'KING') # Cooper 1050 N Kings
-  pattern_1103 <- c('1103', 'KING') # Cooper 1103 Kings
-  pattern_1210 <- c('1210', 'BRACE') # Cooper Brace
-
-  y <- subset(x, CURR_PCP_CITY=="CHERRY HILL")
-
-  y2 <- subset(y, y$VEND_FULL_NAME == "COOPER FAMILY MEDICINE" |y$VEND_FULL_NAME == "COOPER PHYSICIANS OFFICES")
-
-  y2$VEND_FULL_NAME[str_detect(y2$CURR_PCP_ADDRESS_LINE_1, pattern_1050)] <- "COOPER 1050 KINGS"
-  y2$VEND_FULL_NAME[str_detect(y2$CURR_PCP_ADDRESS_LINE_1, pattern_1103)] <- "COOPER 1103 KINGS"
-  y2$VEND_FULL_NAME[str_detect(y2$CURR_PCP_ADDRESS_LINE_1, pattern_1210)] <- "COOPER 1210 BRACE"
-
-  y2$PRACTICE[y2$VEND_FULL_NAME == "COOPER 1050 KINGS"] <- "Cooper 1050 Kings"
-  y2$PRACTICE[y2$VEND_FULL_NAME == "COOPER 1103 KINGS"] <- "Cooper 1103 Kings"
-  y2$PRACTICE[y2$VEND_FULL_NAME == "COOPER 1210 BRACE"] <- "Cooper 1210 Brace"
-
-  y2$PAYER <- "UNITED"
-  y2$Source <- "United"
-
-  y2 <- y2 %>% filter(is.na(PRACTICE) == F)
-
-  # Keeps only where PCP City is Camden, Pennsauken, or Oaklyn, and keeps all of CamCare
-  x <- subset(x, CURR_PCP_CITY=="CAMDEN" | CURR_PCP_CITY=="CADMEN" |CURR_PCP_CITY=="CANDEM" | CURR_PCP_CITY=="PENNSAUKEN"| CURR_PCP_CITY=="OAKLYN" | VEND_FULL_NAME=="CAMCARE HEALTH CORPORATION")
 
   # If the code to rename vendors gives you trouble, modify the below code to fix the errors
   x <- data.frame(lapply(x, as.character), stringsAsFactors=FALSE)
@@ -96,80 +69,73 @@ united <- function(x) {
 
   # Sorts columns in x and y3 A-Z
   x <- x[,order(names(x))]
-  y3 <- y2[,order(names(y2))]
 
   # Converts Current PCP City to all capital letters
   x$CURR_PCP_CITY <- toupper(x$CURR_PCP_CITY)
 
-  # Renames vendors to match Current PCP City
-  x$VEND_FULL_NAME[x$VEND_FULL_NAME == "LOURDES MEDICAL ASSOCIATES" & x$CURR_PCP_CITY == "CAMDEN"] <- "LOURDES MEDICAL ASSOCIATES_CAMDEN"
-  x$VEND_FULL_NAME[x$VEND_FULL_NAME == "LOURDES MEDICAL ASSOCIATES PA" & x$CURR_PCP_CITY == "CAMDEN"] <- "LOURDES MEDICAL ASSOCIATES_CAMDEN"
-  x$VEND_FULL_NAME[x$VEND_FULL_NAME == "LOURDES MEDICAL ASSOCIATES" & x$CURR_PCP_CITY == "PENNSAUKEN"] <- "LOURDES MEDICAL ASSOCIATES_PENNSAUKEN"
-  x$VEND_FULL_NAME[x$VEND_FULL_NAME == "LOURDES MEDICAL ASSOCIATES PA" & x$CURR_PCP_CITY == "PENNSAUKEN"] <- "LOURDES MEDICAL ASSOCIATES_PENNSAUKEN"
-  x$VEND_FULL_NAME[x$VEND_FULL_NAME == "OSBORN FAMILY PRACTICE" & x$CURR_PCP_CITY == "CAMDEN"] <- "OSBORN FAMILY PRACTICE_CAMDEN"
-  x$VEND_FULL_NAME[x$VEND_FULL_NAME == "THE OSBORN FAMILY HEALTH CENTER" & x$CURR_PCP_CITY == "CAMDEN"] <- "OSBORN FAMILY PRACTICE_CAMDEN"
-  x$VEND_FULL_NAME[x$VEND_FULL_NAME == "THE OSBORN FAMILY HEALTH CENTER INC" & x$CURR_PCP_CITY == "CAMDEN"] <- "OSBORN FAMILY PRACTICE_CAMDEN"
-  x$VEND_FULL_NAME[x$VEND_FULL_NAME == "BROADWAY FAMILY PRACTICE" & x$CURR_PCP_CITY == "CAMDEN"] <- "RELIANCE BROADWAY_CAMDEN"
-  x$VEND_FULL_NAME[x$VEND_FULL_NAME == "BROADWAY FAMILY PRACTICE" & x$CURR_PCP_CITY == "PENNSAUKEN"] <- "RELIANCE BROADWAY_PENNSAUKEN"
-  x$VEND_FULL_NAME[x$VEND_FULL_NAME == "COOPER PHYSICIANS OFFICES" & x$CURR_PCP_CITY == "OAKLYN"] <- "COOPER WOODLYNNE"
+  # Create PRACTICE column
+  x$PRACTICE <- NA
 
-  # Maps to practices
-  x$PRACTICE[x$VEND_FULL_NAME == "ACOSTA RAMON"] <- "Acosta"
-  x$PRACTICE[x$VEND_FULL_NAME == "RELIANCE BROADWAY_CAMDEN"] <- "Reliance Broadway"
-  x$PRACTICE[x$VEND_FULL_NAME == "NEW JERSEY MEDICAL AND HEALTH ASSOCIATES LLC"] <- "Reliance Broadway"
-  x$PRACTICE[x$VEND_FULL_NAME == "RELIANCE MEDICAL GROUP"] <- "Reliance Broadway"
-  x$PRACTICE[x$VEND_FULL_NAME == "RELIANCE MEDICAL GROUP LLC"] <- "Reliance Broadway"
-  x$PRACTICE[x$VEND_FULL_NAME == "RELIANCE BROADWAY_PENNSAUKEN"] <- "Reliance Pennsauken"
-  x$PRACTICE[x$VEND_FULL_NAME == "CAMCARE HEALTH CORPORATION"] <- "CAMcare"
-  x$PRACTICE[x$VEND_FULL_NAME == "COOPER AMBULATORY PEDIATRICS"] <- "Cooper Pediatrics"
-  x$PRACTICE[x$VEND_FULL_NAME == "COOPER FAMILY MEDICINE"] <- "Cooper Family"
-  x$PRACTICE[x$VEND_FULL_NAME == "COOPER FAMILY MEDICINE PC"] <- "Cooper Family"
-  x$PRACTICE[x$VEND_FULL_NAME == "COOPER PEDIATRICS"] <- "Cooper Pediatrics"
-  x$PRACTICE[x$VEND_FULL_NAME == "COOPER HEALTH SYSTEM PEDIATRICS DEPARTMENT"] <- "Cooper Pediatrics"
-  x$PRACTICE[x$VEND_FULL_NAME == "COOPER HEALTH SYSTEM - PEDIATRICS DEPARTMENT "] <- "Cooper Pediatrics"
-  x$PRACTICE[x$VEND_FULL_NAME == "COOPER HEALTH SYSTEM  PEDIATRICS DEPARTMENT"] <- "Cooper Pediatrics"
-  x$PRACTICE[x$VEND_FULL_NAME == "COOPER HEALTH SYSTEM - PEDIATRICS DEPARTMENT"] <- "Cooper Pediatrics"
-  x$PRACTICE[x$VEND_FULL_NAME == "COOPER PHYSICIANS OFFICES"] <- "Cooper IM"
-  x$PRACTICE[x$VEND_FULL_NAME == "COOPER PHYSICIAN OFFICES PA"] <- "Cooper IM"
-  x$PRACTICE[x$VEND_FULL_NAME == "Cooper_UHI_Nic"] <- "Cooper IM"
-  x$PRACTICE[x$VEND_FULL_NAME == "JEFFREY A KLEEMAN DO"] <- "Fairview"
-  x$PRACTICE[x$VEND_FULL_NAME == "LOURDES MEDICAL ASSOCIATES_CAMDEN"] <- "Osborn"
-  x$PRACTICE[x$VEND_FULL_NAME == "LOURDES MEDICAL ASSOCIATES_PENNSAUKEN"] <- "Lourdes Pediatrics"
-  x$PRACTICE[x$VEND_FULL_NAME == "OSBORN FAMILY PRACTICE_CAMDEN"] <- "Osborn"
-  x$PRACTICE[x$VEND_FULL_NAME == "PROJECT HOPE"] <- "Project Hope"
-  x$PRACTICE[x$VEND_FULL_NAME == "PROJECT HOPE HOMELESS PROGRAM"] <- "Project Hope"
-  x$PRACTICE[x$VEND_FULL_NAME == "RIVER PRIMARY CARE CENTER"] <- "Reliance River"
-  x$PRACTICE[x$VEND_FULL_NAME == "ST LUKE'S CATHOLIC MED SVCS"] <- "St. Lukes"
-  x$PRACTICE[x$VEND_FULL_NAME == "ST LUKES CATHOLIC MEDICAL SERVICES INC"] <- "St. Lukes"
-  x$PRACTICE[x$VEND_FULL_NAME == "ST LUKE'S CATHOLIC MED  SVCS"] <- "St. Lukes"
-  x$PRACTICE[x$VEND_FULL_NAME == "ST LUKE’S CATHOLIC MEDICAL SERVICES INC"] <- "St. Lukes"
-  x$PRACTICE[x$VEND_FULL_NAME == "ST LUKE'S CATHOLIC MEDICAL SERVICES INC"] <- "St. Lukes"
-  x$PRACTICE[x$VEND_FULL_NAME == "VIRTUA FAMILY MEDICINE-COOPER RIVER"] <- "Virtua"
-  x$PRACTICE[x$VEND_FULL_NAME == "VIRTUA MEDICAL GROUP"] <- "Virtua"
-  x$PRACTICE[x$VEND_FULL_NAME == "VIRTUA MEDICAL GROUP PA"] <- "Virtua"
-  x$PRACTICE[x$VEND_FULL_NAME == "NELSON HOMER L"] <- "Broadway Community"
-  x$PRACTICE[x$VEND_FULL_NAME == "NELSON, HOMER"] <- "Broadway Community"
-  x$PRACTICE[x$VEND_FULL_NAME == "EAST CAMDEN MEDICAL PRACTICE"] <- "East Camden"
-  x$PRACTICE[x$VEND_FULL_NAME == "NGUYEN BAO D"] <- "Bao Nguyen"
-  x$PRACTICE[x$VEND_FULL_NAME == "BROADWAY COMM HLTH CARE"] <- "Broadway Community"
-  x$PRACTICE[x$VEND_FULL_NAME == "COOPER WOODLYNNE"] <- "Cooper Woodlynne"
+  # Establish addresses to search for
+  pattern_acosta <- c('2 LEONARD') # Acosta
+  pattern_bao <- c('2706 WESTFIELD') # Bao
+  pattern_bwy_comm <- c('2809 RIVER', '442 S BROADWAY') # Broadway Comm
+  pattern_cooper_1050 <- c('1050 KING', '1050 N KING') # Cooper 1050 N Kings
+  pattern_cooper_1103 <- c('1103 KING', '1103 N KING') # Cooper 1103 Kings
+  pattern_cooper_1210 <- c('1210 BRACE') # Cooper Brace
+  pattern_cooper_eip <- c('3 COOPER PLZ STE 513', '3 COOPER PLZ RM 513') # Cooper EIP
+  pattern_cooper_fam <- c('1865 HARRISON', '3156 RIVER', '639 COOPER') # Cooper Family
+  pattern_cooper_im_1 <- c('1 COOPER', '2 COOPER') # Cooper IM
+  pattern_cooper_im_2 <- c('3 COOPER PLZ STE 215', '3 COOPER PLZ RM 215', '3 COOPER PLAZA STE 215', '3 COOPER PL STE 215', '3 COOPER PLAZA STE 220', '3 COOPER PLZ RM 220', '3 COOPER PLZ STE 220', '3 COOPER PLAZA STE 411', '3 COOPER PLZ RM 504', '3 COOPER PLZ RM 513')
+  pattern_cooper_multi <- c('3 COOPER PLAZA STE 104', '3 COOPER PLZ STE 104', '3 COOPER PLZ RM 104', '3 COPPER PLAZA ST 104 CAMDEN') # Cooper Multispeciality Suite
+  pattern_cooper_peds <- c('3 COOPER PLAZA STE 200', '3 COOPER PLZ RM 200', '3 COOPER PLZ STE 200', 'THREE COOPER PLAZA STE 200') # Cooper Pediatrics
+  pattern_cooper_wood <- c('1105 1115 LINDEN ST', '1115 LINDEN ST', '2301 WOODLYNNE', '5101 N PARK') # Cooper Woodlyne
+  pattern_east_camden <- c('309 MARLTON') # East Camden
+  pattern_fairview <- c('YORKSHIP') # Fairview
+  pattern_lourdes_peds <- c('2475 MCCLELLAN') # Lourdes Pediatrics
+  pattern_osborn <- c('1600 HADDON', '1601 HADDON') # Osborn
+  pattern_proj_hope <- c('519 WEST', '439 CLINTON') # Project Hope
+  pattern_rel_bwy <- c('602 BROADWAY') # Reliance Broadway
+  pattern_rel_penn <- c('6650 BROWNING') # Reliance Pennsauken
+
+  # Use the string patterns (pattern_* variables) to search addresses and fill PRACTICE field
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, pattern_acosta)] <- "Acosta"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, pattern_bao)] <- "Bao Nguyen"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_bwy_comm, collapse = "|"))] <- "Broadway Community"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_cooper_1050, collapse = "|"))] <- "Cooper 1050 Kings"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_cooper_1103, collapse = "|"))] <- "Cooper 1103 Kings"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, pattern_cooper_1210)] <- "Cooper 1210 Brace"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_cooper_eip, collapse = "|"))] <- "Cooper EIP"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_cooper_fam, collapse = "|"))] <- "Cooper Family"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_cooper_im_1, collapse = "|"))] <- "Cooper IM"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_cooper_im_2, collapse = "|"))] <- "Cooper IM"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_cooper_multi, collapse = "|"))] <- "Cooper Multispecialty"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_cooper_peds, collapse = "|"))] <- "Cooper Pediatrics"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_cooper_wood, collapse = "|"))] <- "Cooper Woodlynne"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, pattern_east_camden)] <- "East Camden"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, pattern_fairview)] <- "Fairview"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, pattern_lourdes_peds)] <- "Lourdes Pediatrics"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_osborn, collapse = "|"))] <- "Osborn"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, paste(pattern_proj_hope, collapse = "|"))] <- "Project Hope"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, pattern_rel_bwy)] <- "Reliance Broadway"
+  x$PRACTICE[str_detect(x$CURR_PCP_ADDRESS_LINE_1, pattern_rel_penn)] <- "Reliance Pennsauken"
+
+  # Filter lists with only PRACTICE field filled out
+  x <- x %>% filter(is.na(PRACTICE) == F)
 
   # Date of birth cleaning before merging with Cherry Hill patients
   x$DOB <- as.Date(x$DOB)
 
-  # Merges x data
-  AllPayers <- rbind(x, y3)
-
   # Sets as dataframe
-  AllPayers <- as.data.frame(AllPayers)
+  x <- as.data.frame(x)
 
   # Adds last capitation
-  AllPayers$LastCapitationDate <- format(Sys.time(), "%m/01/%Y")
+  x$LastCapitationDate <- format(Sys.time(), "%m/01/%Y")
 
   # Remove "U" from string to match TrackVia Subscriber IDs
-  AllPayers$SUBSCRIBER_ID <- gsub("U", "", AllPayers$SUBSCRIBER_ID)
+  x$SUBSCRIBER_ID <- gsub("U", "", x$SUBSCRIBER_ID)
 
-  print(AllPayers)
+  print(x)
 }
 
 
