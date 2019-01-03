@@ -86,7 +86,7 @@ united <- function(x) {
   pattern_cooper_eip <- c('3 COOPER PLZ STE 513', '3 COOPER PLZ RM 513') # Cooper EIP
   pattern_cooper_fam <- c('1865 HARRISON', '3156 RIVER', '639 COOPER') # Cooper Family
   pattern_cooper_im_1 <- c('1 COOPER', '2 COOPER') # Cooper IM
-  pattern_cooper_im_2 <- c('3 COOPER PLZ STE 215', '3 COOPER PLZ RM 215', '3 COOPER PLAZA STE 215', '3 COOPER PL STE 215', '3 COOPER PLAZA STE 220', '3 COOPER PLZ RM 220', '3 COOPER PLZ STE 220', '3 COOPER PLAZA STE 411', '3 COOPER PLZ RM 504', '3 COOPER PLZ RM 513')
+  pattern_cooper_im_2 <- c('3 COOPER PLZ STE 215', '3 COOPER PLZ RM 215', '3 COOPER PLAZA STE 215', '3 COOPER PLAZA SUITE 215', '3 COOPER PL STE 215', '3 COOPER PLAZA STE 220', '3 COOPER PLZ RM 220', '3 COOPER PLZ STE 220', '3 COOPER PLAZA STE 411', '3 COOPER PLZ RM 504', '3 COOPER PLZ RM 513')
   pattern_cooper_multi <- c('3 COOPER PLAZA STE 104', '3 COOPER PLZ STE 104', '3 COOPER PLZ RM 104', '3 COPPER PLAZA ST 104 CAMDEN') # Cooper Multispeciality Suite
   pattern_cooper_peds <- c('3 COOPER PLAZA STE 200', '3 COOPER PLZ RM 200', '3 COOPER PLZ STE 200', 'THREE COOPER PLAZA STE 200') # Cooper Pediatrics
   pattern_cooper_wood <- c('1105 1115 LINDEN ST', '1115 LINDEN ST', '2301 WOODLYNNE', '5101 N PARK') # Cooper Woodlyne
