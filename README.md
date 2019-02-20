@@ -62,8 +62,8 @@ y <- northgate(x)
 
 # Deduplication -----------------------------------------------------------
 # Clean AllPayersHIEID file from CareEvolution for binding with result of allpayers_galileo() function
-# a = AllPayersHIEID file from CareEvolution
-# c = CurrentHIEIDs file from CareEvolution on the FTP
+# a = AllPayersHIEID file from CareEvolution. Currently, it's the result of the united() function with HIE IDs attached.
+# c = CurrentHIEIDs file from CareEvolution on the FTP in /Extract/Reports folder. File is CurrentHIEIDs.csv.
 # allpayers_mco(a, c)
 
 a <- read_csv('c:/filepath/AllPayerHIEIDs-2018-04-05.csv')
@@ -71,10 +71,10 @@ c <- read_csv("c:/filepath/CurrentHIEIDs.csv")
 m <- allpayers_mco(a, c)
 
 # Clean Galileo file for binding with result of allpayers_mco() function
-# g = Galileo 'Capitation List' file
+# g = Galileo 'Capitation List' file located here: https://camdenhie.careevolution.com/CamdenGalileo/#/datasets/1011/reports/4330. Make sure to update Attribution End Date filter in Galileo before exporting.
 # c = CurrentHIEIDs file
 
-g <- read_csv("c:/filepath/patient_list.csv/galileo_patient_list.csv")
+g <- read_csv("c:/filepath/patient_list.csv/Capitation List.csv")
 g2 <- allpayers_gal(g, c)
 
 # deduplicate:
