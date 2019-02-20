@@ -15,10 +15,28 @@ devtools::install_github("CamdenCoalitionOfHealthcareProviders/caplist")
 Usage
 -----
 
-In order to use the `caplist` package, please have the following packages installed: `tidyverse`, `zipcode`, `gtools`, `janitor`, and `reshape`.
+In order to use the `caplist` package, please have the following packages installed: `tidyverse`, `zipcode`, `gtools`, and `janitor`.
 
 ``` r
+# This is a template to use the caplist R package.
+# The caplist R package has functions used to clean the Camden Coalition's
+# patient lists from MCO and ACO contracts.
+
+# This file is meant to be run in sections, NOT all at once. You will need to have
+# the most updated version of the package installed, plus the rest of the
+# libraries loaded for each section.
+
+# caplist on GitHub: https://github.com/CamdenCoalitionOfHealthcareProviders/caplist
+
+# Install the caplist package using the devtools package:
+install.packages("devtools")
+devtools::install_github("CamdenCoalitionOfHealthcareProviders/caplist")
+
 library(caplist)
+library(tidyverse)
+library(janitor)
+library(gtools)
+library(zipcode)
 
 # UNITED ------------------------------------------------------------------
 # Read in patient list file
