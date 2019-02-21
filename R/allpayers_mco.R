@@ -48,7 +48,10 @@ allpayers_mco <- function(a, c) {
         -`Cap List Payer`,
         -HIEID,
         -`Cap List Subscriber ID`,
-        - MEDICAID_NO
+        - MEDICAID_NO,
+        -MEMB_ETHNICITY,
+        -MEMB_LANGUAGE,
+        -person_id
       )
 
     # Convert column from character to date: LastCapitationDate, DOB

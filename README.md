@@ -45,20 +45,28 @@ x <- read_csv('c:/filepath/patient_list.csv')
 # Clean patient list file (assuming it's a Galileo file)
 y <- united(x)
 
+# Export clean United patient list
+write_csv(y, paste0('c:/filepath/', format(Sys.Date(), "%Y%m"), "/",format(Sys.Date(), "%Y-%m-%d-"),"United.csv"), na = "")
 
 # CAMCARE UNITED ----------------------------------------------------------
 # Read in patient list file
-x <- read_csv('c:/filepath/patient_list.csv')
+c <- read_csv('c:/filepath/patient_list.csv')
 
 # Clean patient list file
-y <- camcare(x)
+c_clean <- camcare(x)
+
+# Export clean Camcare United patient list
+write_csv(c_clean, paste0('c:/filepath/', format(Sys.Date(), "%Y%m"), "/", format(Sys.Date(), "%Y-%m-%d-"),"UnitedCAMCare.csv"), na = "")
 
 # NORTHGATE ---------------------------------------------------------------
 # Read in patient list file
-x <- read_csv('c:/filepath/patient_list.csv')
+n <- read_csv('c:/filepath/patient_list.csv')
 
 # Clean patient list file
-y <- northgate(x)
+n_clean <- northgate(x)
+
+# Export clean Northgate patient list
+write_csv(n_clean, paste0('c:/filepath/', format(Sys.Date(), "%Y%m"), "/", format(Sys.Date(), "%Y-%m-%d-"),"Northgate.csv"), na = "")
 
 # Deduplication -----------------------------------------------------------
 # Clean AllPayersHIEID file from CareEvolution for binding with result of allpayers_galileo() function
