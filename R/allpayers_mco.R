@@ -22,7 +22,7 @@ allpayers_mco <- function(a, c) {
     twins <- a2_hie_dupe %>% left_join(c, by = c("Patient ID HIE" = "Patient ID", "SUBSCRIBER_ID" = "Cap List Subscriber ID"))
 
     # Remove possible twins records from AllPayers
-    a3 <- a2 %>% anti_join(twins, by = "Patient ID")
+    a3 <- a2 %>% anti_join(twins, by = "Patient ID HIE")
 
     # Add EMPI to AllPayers and remove NIC patients from AllPayers
     c_match <- c %>% filter(is.na(c$`Cap List Payer`) == T | `Cap List Payer` != 'CooperUHI')
