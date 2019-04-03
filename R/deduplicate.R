@@ -32,7 +32,7 @@ combine_mco_aco <-
 # Fine duplicate records based on `Patient ID HIE` field
 twins <-
   function(c) {
-    twins <- c %>% group_by(`Patient ID`) %>% mutate(hie_count = n()) %>% filter(hie_count > 1)
+    twins <- c %>% group_by(`Patient ID HIE`) %>% mutate(hie_count = n()) %>% filter(hie_count > 1)
     twins
   }
 
