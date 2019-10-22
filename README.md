@@ -37,6 +37,8 @@ library(tidyverse)
 library(janitor)
 library(gtools)
 library(zipcode)
+library(dplyr)
+library(magrittr)
 
 # UNITED ------------------------------------------------------------------
 # Read in patient list file
