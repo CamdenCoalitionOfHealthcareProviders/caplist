@@ -15,7 +15,7 @@ devtools::install_github("CamdenCoalitionOfHealthcareProviders/caplist")
 Usage
 -----
 
-In order to use the `caplist` package, please have the following packages installed: `tidyverse`, `zipcode`, `gtools`, and `janitor`.
+In order to use the `caplist` package, please have the following packages installed: `tidyverse`,`janitor`, `gtools`,`zipcode`, 'dplyr', and 'magrittr'.
 
 ``` r
 # This is a template to use the caplist R package.
